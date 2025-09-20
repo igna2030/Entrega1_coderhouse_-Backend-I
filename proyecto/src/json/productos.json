@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "Pepe",
+    "description": "Galleta de chocolate",
+    "price": 550,
+    "thumbnail": "foto1.jpg",
+    "code": "1234asd",
+    "stock": 500
+  },
+  {
+    "id": 2,
+    "title": "Mouse logitech g203",
+    "description": "Mouse para computadora",
+    "price": 500,
+    "thumbnail": "https://fullh4rd.com.ar/img/productos/14/mouse-logitech-g203-gaming-lightsync-blue-910005795-0.jpg",
+    "code": "MON-GAMER-001",
+    "stock": 50
+  },
+  {
+    "id": 3,
+    "title": "Manzanas Frescas",
+    "description": "Manzanas rojas y jugosas, ideales para postres o comer solas.",
+    "price": 2.5,
+    "thumbnail": "https://media.istockphoto.com/id/1297069857/es/vector/manzanas-dos.jpg?s=612x612&w=0&k=20&c=FiIDOGiqkdNqTrsCCYxP7W7VnSgkcvj5zsqawJFtLGc=",
+    "code": "FRUTA-MANZANA-001",
+    "stock": 100
+  },
+  {
+    "id": 4,
+    "title": "Galletas saladas",
+    "description": "Snack saludable",
+    "price": 350,
+    "thumbnail": "foto4.jpg",
+    "code": "1213def",
+    "stock": 200
+  },
+  {
+    "id": 5,
+    "title": "pepa",
+    "description": "Galleta",
+    "price": 550,
+    "thumbnail": "foto",
+    "code": "23",
+    "stock": 500
+  },
+  {
+    "id": 6,
+    "title": "Monitor Gamer",
+    "description": "Monitor de 24 pulgadas, 144Hz",
+    "price": 250,
+    "thumbnail": "https://example.com/monitor.jpg",
+    "code": "MON-GAMER-001",
+    "stock": 50
+  }
+]
