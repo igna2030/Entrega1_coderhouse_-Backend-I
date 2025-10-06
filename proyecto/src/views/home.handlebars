@@ -1,0 +1,19 @@
+<h2>Lista de productos</h2>
+{{#if productos}}
+<ul id ="products-list-home">
+    {{#each productos}}
+    <li>
+        <strong>ID: {{this.id}} Nombre:{{this.title}}</strong>
+        Precio: {{this.price}} <br>
+        Descripcion: {{this.description}} <br>
+        Codigo: {{this.code}} <br>
+        Stock: {{this.stock}} <br>
+    </li>
+    {{/each}}
+
+</ul>
+
+{{else}}
+<strong> No hay productos para mostrar</strong>
+
+{{/if}}
