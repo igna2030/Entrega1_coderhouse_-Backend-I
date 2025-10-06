@@ -5,9 +5,8 @@ import http from 'http';
 import path from 'path';
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
-import viewsRouter from './routes/views.router.js';
 import ProductManager from './managers/ProductManager.js';
-import { Socket } from 'dgram';
+import viewsRouter from './routes/views.router.js';
 
 const app = express();
 const port = 8080;
@@ -33,7 +32,7 @@ app.use('/api/productos', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
 
-const productManager = new ProductManager('./src/data/productos.json')
+const productManager = new ProductManager('./src/json/productos.json')
 
 io.on('connection', async (socket)=>{
     console.log('Cliente conectado');
@@ -44,7 +43,7 @@ io.on('connection', async (socket)=>{
         try {
             await productManager.addProduct(productData);
             const updatedProducts = await productManager.getProducts();
-            io.sockets.emit('productos', updatedProducts);
+            io.emit('productos', updatedProducts);
             
         } catch (error) {
             console.log("Error con el producto",error.message);
@@ -56,7 +55,7 @@ io.on('connection', async (socket)=>{
         try {
             await productManager.delete_product(id);
             const updatedProducts = await productManager.getProducts();
-            io.sockets.emit('productos', updatedProducts);
+            io.emit('productos', updatedProducts);
             
         } catch (error) {
             console.log("Error al eliminar el producto",error.message);

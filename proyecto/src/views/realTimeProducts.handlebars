@@ -1,24 +1,33 @@
+<h1>Productos en Tiempo Real (Socket.io)</h1>
+<div class="forms-container">
+    <h2>Agregar Nuevo Producto</h2>
+    <form id="addProductForm">
+        <input type="text" name="title" placeholder="Título" required>
+        <input type="text" name="description" placeholder="Descripción" required>
+        <input type="number" name="price" placeholder="Precio" required>
+        <input type="text" name="thumbnail" placeholder="Imagen URL">
+        <input type="text" name="code" placeholder="Código Único" required>
+        <input type="number" name="stock" placeholder="Stock" required>
+        <button type="submit">Agregar Producto</button>
+    </form>
 
+    <h2>Eliminar Producto por ID</h2>
+    <form id="deleteProductForm">
+        <input type="number" name="id" placeholder="ID del Producto a Eliminar" required>
+        <button type="submit">Eliminar Producto</button>
+    </form>
+</div>
 
+<hr>
 
-
-
-<h2>Lista de productos</h2>
-{{#if productos}}
-<ul id ="products-list-home">
+<h2>Lista de Productos en Tiempo Real</h2>
+<ul id="realTimeProductsList">
     {{#each productos}}
-    <li>
-        <strong>ID: {{this.id}} Nombre:{{this.title}}</strong>
-        Precio: {{this.price}} <br>
-        Descripcion: {{this.description}} <br>
-        Codigo: {{this.code}} <br>
-        Stock: {{this.stock}} <br>
-    </li>
+        <li id="product-{{this.id}}">
+            <strong>ID: {{this.id}} Nombre: {{this.title}}</strong> - Precio: {{this.price}}
+        </li>
     {{/each}}
-
 </ul>
 
-{{else}}
-<strong> No hay productos para mostrar</strong>
-
-{{/if}}
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
