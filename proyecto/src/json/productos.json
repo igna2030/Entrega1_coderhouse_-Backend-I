@@ -43,14 +43,5 @@
     "thumbnail": "foto",
     "code": "23",
     "stock": 500
-  },
-  {
-    "id": 6,
-    "title": "Monitor Gamer",
-    "description": "Monitor de 24 pulgadas, 144Hz",
-    "price": 250,
-    "thumbnail": "https://example.com/monitor.jpg",
-    "code": "MON-GAMER-001",
-    "stock": 50
   }
 ]

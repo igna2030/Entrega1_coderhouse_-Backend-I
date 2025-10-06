@@ -66,7 +66,7 @@ export default class ProductManager {
   }
 
   async delete_product(id) {
-    const products = await this.#readProducts();
+    let products = await this.#readProducts();
     const length = products.length;
     products = products.filter((p) => p.id !== parseInt(id));
     if (length === products.length) {

@@ -19,9 +19,16 @@ app.use((req,res,next)=>{
     next()
 });
 
-app.engine('handlebars',engine());
+app.engine('handlebars', engine({
+    layout: false,
+    
+    defaultLayout: false 
+}));
+
+
 app.set('view engine','handlebars');
 app.set('views',path.resolve('./src/views'));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,32 +46,28 @@ io.on('connection', async (socket)=>{
     const initialProducts =  await productManager.getProducts();
     socket.emit('productos', initialProducts);
     
-    socket.on('new-product',async (productData)=>{
+    socket.on('new-product', async (productData) => { 
         try {
             await productManager.addProduct(productData);
             const updatedProducts = await productManager.getProducts();
-            io.emit('productos', updatedProducts);
-            
+            io.emit('productsUpdate', updatedProducts); 
         } catch (error) {
             console.log("Error con el producto",error.message);
-            socket.emit('prouct-error',{message: error.message});
+            socket.emit('product-error', {message: error.message}); 
         }
     });
 
-    socket.on('deleteProduct',async (id)=>{
+    socket.on('deleteProduct', async (id) => { 
         try {
             await productManager.delete_product(id);
             const updatedProducts = await productManager.getProducts();
-            io.emit('productos', updatedProducts);
-            
+            io.emit('productsUpdate', updatedProducts); 
         } catch (error) {
             console.log("Error al eliminar el producto",error.message);
-            socket.emit('prouct-error',{message: error.message});
-            
+            socket.emit('product-error', {message: error.message}); 
         }
     });
 })
-
 httpServer.listen(port, () => {
     console.log(` Servidor Express y Socket.io escuchando en el puerto ${port}`);
 });
