@@ -34,23 +34,5 @@
     "thumbnail": "foto4.jpg",
     "code": "1213def",
     "stock": 200
-  },
-  {
-    "id": 5,
-    "title": "pepa",
-    "description": "Galleta",
-    "price": 550,
-    "thumbnail": "foto",
-    "code": "23",
-    "stock": 500
-  },
-  {
-    "id": 6,
-    "title": "S.T.A.L.K.E.R shadow of Chernobyl",
-    "description": "videogame ",
-    "price": 20,
-    "thumbnail": "https://m.media-amazon.com/images/M/MV5BYTc5Mjg1NjYtNzlhMi00MGZmLWIwMWMtZjE0OTc3MmM4OWE0XkEyXkFqcGc@._V1_.jpg",
-    "code": "123123123",
-    "stock": 10
   }
 ]

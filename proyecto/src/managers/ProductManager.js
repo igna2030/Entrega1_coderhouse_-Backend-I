@@ -1,8 +1,9 @@
 import fs from "fs/promises";
 
 export default class ProductManager {
-  constructor(path) {
+  constructor(path,io) {
     this.path = path;
+    this.io = io;
   }
 
   async #readProducts() {
@@ -48,6 +49,9 @@ export default class ProductManager {
 
     products.push(newProduct);
     await this.#writeProducts(products);
+    if(this.io){
+      this.io.emit('productsUpdate',products);
+    }
     return newProduct;
   }
 
@@ -73,6 +77,9 @@ export default class ProductManager {
       throw new Error(`No existe un producto con ese id:${id}`);
     }
     this.#writeProducts(products);
+    if(this.io){
+      this.io.emit('productsUpdate', products); 
+    }
     return `Se elimino el producto con el id ${id}`;
   }
   async update_product({id,title,description,price,thumbnail,code,stock}) 

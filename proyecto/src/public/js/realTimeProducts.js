@@ -30,7 +30,7 @@ socket.on('productsUpdate', (updateProducts) => {
 });
 
 
-addForm.addEventListener('submit', (e) => {
+addForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(addForm);
     const productData = {};
@@ -41,13 +41,26 @@ addForm.addEventListener('submit', (e) => {
             productData[key] = value;
         }
     });
+    try {
+        const response = await fetch('/api/productos', {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify(productData)
+        });
+        const result = await response.json();
+        if(!response.ok){
+            throw new Error(result.error || 'Error al agregar el producto ');
+        }
+        addForm.reset();
+        
+    } catch (error) {
+        console.error('Error al agregar el producto error:',error)
+        
+    }
     
-  
-    socket.emit('new-product', productData); 
-    addForm.reset();
 });
 
-deleteForm.addEventListener('submit', (e) => {
+deleteForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(deleteForm);
     const id = Number(formData.get('id'));
@@ -56,9 +69,22 @@ deleteForm.addEventListener('submit', (e) => {
         alert("Por favor ingrese un ID válido");
         return;
     }
-    
-    socket.emit('deleteProduct', id); 
-    deleteForm.reset();
+
+    try {
+        const response  = await fetch(`/api/productos/${id}`,{
+            method:'DELETE'
+        })
+
+        const result = await response.json();
+        if(!response.ok){
+            throw new Error(result.error || 'Error al eliminar el producto ');
+        }
+        deleteForm.reset();
+    } catch (error) {
+
+        console.error('Error al eliminar el producto error:',error)
+        
+    }
 });
 
 

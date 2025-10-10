@@ -13,9 +13,11 @@ const port = 8080;
 
 const httpServer = http.createServer(app);
 const io = new IOServer(httpServer);
+const product_manager = new ProductManager('src/json/productos.json',io);
 
 app.use((req,res,next)=>{
-    req.io = io
+    req.productManager = product_manager;
+    req.io = io;
     next()
 });
 
@@ -39,34 +41,12 @@ app.use('/api/productos', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
 
-const productManager = new ProductManager('./src/json/productos.json')
 
 io.on('connection', async (socket)=>{
     console.log('Cliente conectado');
-    const initialProducts =  await productManager.getProducts();
+    const initialProducts =  await product_manager.getProducts();
     socket.emit('productos', initialProducts);
     
-    socket.on('new-product', async (productData) => { 
-        try {
-            await productManager.addProduct(productData);
-            const updatedProducts = await productManager.getProducts();
-            io.emit('productsUpdate', updatedProducts); 
-        } catch (error) {
-            console.log("Error con el producto",error.message);
-            socket.emit('product-error', {message: error.message}); 
-        }
-    });
-
-    socket.on('deleteProduct', async (id) => { 
-        try {
-            await productManager.delete_product(id);
-            const updatedProducts = await productManager.getProducts();
-            io.emit('productsUpdate', updatedProducts); 
-        } catch (error) {
-            console.log("Error al eliminar el producto",error.message);
-            socket.emit('product-error', {message: error.message}); 
-        }
-    });
 })
 httpServer.listen(port, () => {
     console.log(` Servidor Express y Socket.io escuchando en el puerto ${port}`);
