@@ -13,17 +13,16 @@ const port = 8080;
 
 const httpServer = http.createServer(app);
 const io = new IOServer(httpServer);
-const product_manager = new ProductManager('src/json/productos.json',io);
+const product_manager = new ProductManager('src/json/productos.json');
 
 app.use((req,res,next)=>{
+    req.socket = io; 
     req.productManager = product_manager;
-    req.io = io;
     next()
 });
 
 app.engine('handlebars', engine({
     layout: false,
-    
     defaultLayout: false 
 }));
 
@@ -36,7 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('./src/public')));
 
-// Asignación de routers
 app.use('/api/productos', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
@@ -44,7 +42,7 @@ app.use('/', viewsRouter);
 
 io.on('connection', async (socket)=>{
     console.log('Cliente conectado');
-    const initialProducts =  await product_manager.getProducts();
+    const initialProducts = await product_manager.getProducts();
     socket.emit('productos', initialProducts);
     
 })
