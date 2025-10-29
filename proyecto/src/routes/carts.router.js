@@ -1,11 +1,9 @@
 import { Router } from 'express';
-import ProductManager from '../managers/ProductManager.js';
 import CartManager from '../managers/CartManager.js';
-
-
 const cartsRouter = Router();
-const cartManager = new CartManager('src/json/carts.json');
-const productManager = new ProductManager('src/json/productos.json');
+const cartManager = new CartManager('src/json/carts.json'); 
+
+
 
 cartsRouter.post('/', async (req, res) => {
     try {
@@ -22,13 +20,17 @@ cartsRouter.get("/", async (req, res) => {
         let carts = await cartManager.getCarts();
         res.status(200).json({ carts });
     } catch (error) {
-        res.status(500).json({ error: "Error inesperado." });
+        res.status(500).json({ error: "Error inesperado al listar carritos." });
     }
 });
 
 cartsRouter.get('/:cid', async (req, res) => {
     try {
         const cartId = parseInt(req.params.cid, 10);
+        if (isNaN(cartId)) {
+            return res.status(400).json({ error: 'ID de carrito inválido.' });
+        }
+        
         const cart = await cartManager.getCartById(cartId);
         res.status(200).json(cart.products);
     } catch (error) {
@@ -39,8 +41,14 @@ cartsRouter.get('/:cid', async (req, res) => {
 
 cartsRouter.post('/:cid/productos/:pid', async (req, res) => {
     try {
+        const productManager = req.productManager; 
+        
         const cartId = parseInt(req.params.cid, 10);
         const productId = parseInt(req.params.pid, 10);
+        
+        if (isNaN(cartId) || isNaN(productId)) {
+            return res.status(400).json({ error: 'IDs de carrito o producto inválidos.' });
+        }
         
         try {
             await productManager.getProductById(productId);
@@ -51,6 +59,7 @@ cartsRouter.post('/:cid/productos/:pid', async (req, res) => {
         const updatedCart = await cartManager.addProductToCart(cartId, productId);
         res.status(200).json({ message: 'Producto agregado al carrito exitosamente', cart: updatedCart });
     } catch (error) {
+        console.error("Error al agregar producto al carrito:", error.message);
         if (error.message.includes('No existe un carrito')) {
             return res.status(404).json({ error: error.message });
         }
@@ -59,4 +68,4 @@ cartsRouter.post('/:cid/productos/:pid', async (req, res) => {
 });
 
 
- export default cartsRouter;
+export default cartsRouter;
