@@ -1,17 +1,21 @@
-
+import ProductModel from '../models/ProductModel.js';
 import mongoose from 'mongoose';
+import 'dotenv/config';
 
-const connectDB = async()=>{
-  const mongoURI="mongodb+srv://imalaguti05_db_user:<db_password>@cluster0.p4xbmbw.mongodb.net/?appName=Cluster0"
+const environment = async () => {
   try {
-    await mongoose.connect(mongoURI);
-    
+    await mongoose.connect(
+      process.env.MONGO_URI,
+      { dbName: "coderhouse" }
+    );
   } catch (error) {
-    console.error('Error al conectarse a la base de datos MongoDB:',error);
+    console.error(' Error al conectarse a la base de datos MongoDB:', error.message);
     process.exit(1);
+  } finally {
+    await mongoose.disconnect();
   }
 
 
 }
 
-export default connectDB;
+export default environment;

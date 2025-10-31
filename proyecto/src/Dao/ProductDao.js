@@ -48,3 +48,6 @@ class ProductDao {
         return await ProductModel.findByIdAndDelete(id);
     }
 }
+
+
+export default ProductDao;
