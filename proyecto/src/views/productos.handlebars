@@ -1,61 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Productos</title>
 </head>
 <body>
 
-    <h1 style="text-align: center; margin-bottom: 20px;">Catálogo de Productos</h1>
+    <h1>Catálogo de Productos</h1>
     <hr>
     
-    <div style="text-align: center; margin-bottom: 20px;">
-        <span style="font-weight: bold;">Página {{currentPage}} de {{totalPages}}</span>
+    <div>
+        <span>Página {{currentPage}} de {{totalPages}}</span>
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+    <div>
         {{#each products}}
-        <div style="border: 1px solid #ccc; padding: 15px; width: 280px;">
-            <h2 style="font-size: 1.2em; margin-bottom: 5px;">{{title}}</h2>
-            <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">{{description}}</p>
-            <p style="font-size: 1.5em; font-weight: bold; color: green; margin-bottom: 10px;">${{price}}</p>
-            <p style="font-size: 0.8em; color: #888;">Stock: {{stock}} | Categoría: {{category}}</p>
+        <div>
+            <h2>{{title}}</h2>
+            <p>{{description}}</p>
+            <p>${{price}}</p>
+            <p>Stock: {{stock}} | Categoría: {{category}}</p>
             
-            <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 5px;">
-                <a href="/products/{{_id}}" 
-                   style="text-align: center; background-color: blue; color: white; padding: 8px; text-decoration: none; display: block;">
+            <div>
+                <a href="/products/{{_id}}">
                     Ver Detalle
                 </a>
                 <button 
-                    onclick="alert('Funcionalidad de agregar al carrito (ID: {{_id}}) aún no implementada en el cliente.')"
-                    style="background-color: green; color: white; padding: 8px; border: none; cursor: pointer; display: block; width: 100%;">
+                    onclick="alert('Funcionalidad de agregar al carrito (ID: {{_id}}) aún no implementada en el cliente.')">
                     Añadir al Carrito
                 </button>
             </div>
         </div>
         {{else}}
-        <p style="text-align: center; font-size: 1.1em; color: gray;">No se encontraron productos en el catálogo.</p>
+        <p>No se encontraron productos en el catálogo.</p>
         {{/each}}
     </div>
 
-    <div style="margin-top: 30px; text-align: center;">
+    <div>
         
         {{#if hasPrevPage}}
-            <a href="{{prevLink}}" 
-               style="background-color: gray; color: white; padding: 10px 15px; text-decoration: none;">
+            <a href="{{prevLink}}">
                 Página Anterior
             </a>
         {{else}}
-            <span style="background-color: #eee; color: #aaa; padding: 10px 15px; cursor: not-allowed;">Página Anterior</span>
+            <span>Página Anterior</span>
         {{/if}}
 
-        <span style="margin: 0 15px; font-weight: bold;">{{currentPage}}</span>
+        <span>{{currentPage}}</span>
 
         {{#if hasNextPage}}
-            <a href="{{nextLink}}" 
-               style="background-color: indigo; color: white; padding: 10px 15px; text-decoration: none;">
+            <a href="{{nextLink}}">
                 Página Siguiente
             </a>
         {{else}}
-            <span style="background-color: #eee; color: #aaa; padding: 10px 15px; cursor: not-allowed;">Página Siguiente</span>
+            <span>Página Siguiente</span>
         {{/if}}
     </div>
 
 </body>
+</html>

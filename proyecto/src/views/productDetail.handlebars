@@ -1,4 +1,8 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Producto - {{product.title}}</title>
 </head>
 <body>
@@ -6,37 +10,37 @@
     <h1>Detalle del Producto</h1>
     <hr>
     
-    <a href="/products" style="text-decoration: none; color: blue;">&larr; Volver al Catálogo</a>
+    <a href="/products">&larr; Volver al Catálogo</a>
 
-    <div style="margin-top: 20px; border: 1px solid #ccc; padding: 20px;">
+    <div>
         
         <h2>{{product.title}}</h2>
         
         <p><strong>Categoría:</strong> {{product.category}}</p>
 
-        <h3 style="color: green;">Precio: ${{product.price}}</h3>
+        <h3>Precio: ${{product.price}}</h3>
 
-        <div style="margin-top: 15px;">
+        <div>
             <h4>Descripción:</h4>
             <p>{{product.description}}</p>
         </div>
         
-        <div style="margin-top: 15px;">
+        <div>
             <p><strong>Stock Disponible:</strong> {{product.stock}} unidades</p>
             <p><strong>Código del Producto:</strong> {{product.code}}</p>
         </div>
 
-        <div style="margin-top: 20px;">
+        <div>
             <button 
-                onclick="alert('Funcionalidad de añadir {{product.title}} al carrito (ID: {{product._id}}).')"
-                style="background-color: blue; color: white; padding: 10px 15px; border: none; cursor: pointer;">
+                onclick="alert('Funcionalidad de añadir {{product.title}} al carrito (ID: {{product._id}}).')">
                 Añadir al Carrito
             </button>
         </div>
         
-        <p style="font-size: 10px; color: #666; margin-top: 10px;">
+        <p>
             ID de MongoDB: {{product._id}}
         </p>
     </div>
 
 </body>
+</html>
