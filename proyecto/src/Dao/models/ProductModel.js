@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import moongosePaginate from 'mongoose-paginate-v2';
+import mongoosePaginate from 'mongoose-paginate-v2';
 import { type } from 'os';
 
 const productSchema = new mongoose.Schema(
@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema(
     }
 );
 
-productSchema.plugin(moongosePaginate);
+productSchema.plugin(mongoosePaginate);
 
 const product = mongoose.model('products',productSchema);
 export default product;

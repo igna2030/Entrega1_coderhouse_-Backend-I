@@ -9,41 +9,36 @@ const cartDao = new CartDao();
 viewsRouter.get("/products", async (req, res) => {
     try {
         const { limit = 10, page = 1, sort, query } = req.query;
-        const options = { limit, page, query };
-
-        if (sort === 'asc' || sort === 'desc') {
-            options.sort = { price: sort === 'asc' ? 1 : -1 };
-        }
-
+        
         const {
             docs: products,
             totalPages,
             prevPage,
             nextPage,
+            page: currentPage,
             hasPrevPage,
             hasNextPage,
-            page: currentPage
         } = await productDao.getProducts({ limit, page, sort, query });
+        
 
-
-        const params = { limit, sort, query };
-        let baseUrl = '/products';
-
-        const queryParams = Object.keys(params)
-            .filter(key => params[key])
-            .map(key => `${key}=${params[key]}`)
+        const nonPageParams = Object.keys(req.query)
+            .filter(key => key !== 'page' && req.query[key]) 
+            .map(key => `${key}=${req.query[key]}`)
             .join('&');
 
-        if (queryParams) {
-            baseUrl += `?${queryParams}`;
-        }
+        const baseUrl = '/products';
+        
+        const buildLink = (pageNumber) => {
+            let link = `${baseUrl}?page=${pageNumber}`;
+            if (nonPageParams) {
+                link += `&${nonPageParams}`;
+            }
+            return link;
+        };
+        
+        const prevLink = hasPrevPage ? buildLink(prevPage) : null;
+        const nextLink = hasNextPage ? buildLink(nextPage) : null;
 
-        const prevLink = hasPrevPage
-            ? `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}page=${prevPage}`
-            : null;
-        const nextLink = hasNextPage
-            ? `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}page=${nextPage}`
-            : null;
 
         res.render("products", {
             products: products,
@@ -55,9 +50,13 @@ viewsRouter.get("/products", async (req, res) => {
             hasNextPage,
             prevLink,
             nextLink,
-            currentSort: sort
+            currentLimit: limit, 
+            currentSort: sort,
+            currentQuery: query
         });
     } catch (error) {
+        console.error("Error al obtener productos para la vista:", error);
+        res.status(500).render("error", { message: "Error al cargar la lista de productos." });
     }
 });
 

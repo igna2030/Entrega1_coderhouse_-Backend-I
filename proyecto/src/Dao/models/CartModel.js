@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import moongosePaginate from 'mongoose-paginate-v2';
+import mongoosePaginate from 'mongoose-paginate-v2';
 const cartSchema = new mongoose.Schema(
     {
         products: {

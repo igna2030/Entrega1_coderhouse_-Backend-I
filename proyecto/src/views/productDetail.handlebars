@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Producto - {{product.title}}</title>
     <link rel="stylesheet" href="/CSS/Style.CSS">
-
 </head>
 
 <body>
 
-        <div class="navbar">
+    <div class="navbar">
         <a href="/" class=".btn-link-style">Inicio</a>
     </div>
 
@@ -39,7 +38,64 @@
             <p><strong>Stock Disponible:</strong> {{product.stock}} unidades</p>
             <p><strong>Código del Producto:</strong> {{product.code}}</p>
         </div>
+        
+        <div style="margin-top: 20px;">
+            <form id="addToCartForm" data-product-id="{{product._id}}" style="display: flex; gap: 10px; align-items: center;">
+                <div class="form-group">
+                    <input type="text" name="cartId" placeholder="ID Carrito" required
+                        title="Ingrese el ID del carrito para agregar el producto">
+                </div>
+                <button type="submit" class="btn-link-style" {{#unless product.stock}}>
+                    {{#if product.stock}}
+                        🛒 Añadir al Carrito
+                    {{else}}
+                        AGOTADO
+                    {{/if}}
+                </button>
+            </form>
+            <p id="message" style="margin-top: 10px; font-weight: bold;"></p>
+        </div>
 
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('addToCartForm');
+            const messageElement = document.getElementById('message');
+
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const productId = form.getAttribute('data-product-id');
+                const cartIdInput = form.querySelector('input[name="cartId"]');
+                const cartId = cartIdInput.value.trim();
+
+                if (!cartId) {
+                    messageElement.textContent = '❌ Por favor, ingresa el ID del carrito.';
+                    return;
+                }
+
+                const url = `/api/carts/${cartId}/products/${productId}`;
+                
+                try {
+                    const response = await fetch(url, { method: 'POST' });
+                    const data = await response.json();
+
+                    if (response.ok && data.status === 'success') {
+                        messageElement.textContent = '✅ Producto agregado al carrito!';
+                        messageElement.style.color = 'green';
+                    } else {
+                        messageElement.textContent = `❌ Error: ${data.message || 'Error desconocido.'}`;
+                        messageElement.style.color = 'red';
+                    }
+                } catch (error) {
+                    messageElement.textContent = '❌ Error de conexión con el servidor.';
+                    messageElement.style.color = 'red';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

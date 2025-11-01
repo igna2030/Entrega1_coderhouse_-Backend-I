@@ -20,6 +20,11 @@
             ID del Carrito:
             <span id="cartIdSpan">{{cart._id}}</span>
         </p>
+        {{#if cart.products}}
+        <button id="clear-cart-btn" class="clear-cart-btn">
+            Vaciar Carrito Completo
+        </button>
+        {{/if}}
     </div>
 
     {{#if cart.products}}
@@ -57,10 +62,45 @@
     {{/if}}
 
     <script>
+
+        
         document.addEventListener('DOMContentLoaded', () => {
+            
+            const showMessage = (message, type = 'info') => {
+                const toast = document.createElement('div');
+                toast.textContent = message;
+
+                toast.style.position = 'fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.padding = '8px 10px';
+                toast.style.borderRadius = '4px';
+                toast.style.color = '#fff';
+                toast.style.fontSize = '14px';
+                toast.style.zIndex = '9999';
+
+                if (type === 'success') {
+                    toast.style.background = '#28a745';
+                } else if (type === 'error') {
+                    toast.style.background = '#dc3545';
+                } else {
+                    toast.style.background = '#007bff';
+                }
+
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.transition = 'opacity 0.3s ease';
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (toast.parentNode) toast.parentNode.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            };
+
             const cartIdSpan = document.getElementById('cartIdSpan');
             if (!cartIdSpan) return;
-
+            const clearCartBtn = document.getElementById('clear-cart-btn');
             const cartId = cartIdSpan.textContent.trim();
 
             const removeBtns = document.querySelectorAll('.remove-one-btn');
@@ -94,6 +134,34 @@
                     }
                 });
             });
+             if (clearCartBtn) { 
+                clearCartBtn.addEventListener('click', async () => {
+                    const url = `/api/carts/${cartId}`;
+
+                    clearCartBtn.disabled = true;
+                    clearCartBtn.textContent = 'Vaciando...';
+                    showMessage('Vaciando el carrito completo...', 'info');
+
+                    try {
+                        const response = await fetch(url, { method: 'DELETE' });
+                        const data = await response.json();
+
+                        if (response.ok && data.status === 'success') {
+                            showMessage('¡Carrito vaciado exitosamente! Redirigiendo...', 'success');
+                            setTimeout(() => { window.location.reload(); }, 1000);
+                        } else {
+                            showMessage(`Error al vaciar el carrito: ${data.message || 'Error desconocido.'}`, 'error');
+                            clearCartBtn.disabled = false;
+                            clearCartBtn.textContent = 'Vaciar Carrito Completo';
+                        }
+                    } catch (error) {
+                        console.error('Error de red al vaciar el carrito:', error);
+                        showMessage('Error de conexión con el servidor.', 'error');
+                        clearCartBtn.disabled = false;
+                        clearCartBtn.textContent = 'Vaciar Carrito Completo';
+                    }
+                });
+            }
         });
     </script>
 </body>
