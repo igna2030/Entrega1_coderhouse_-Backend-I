@@ -1,69 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Producto - {{product.title}}</title>
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0 auto;
-            max-width: 800px; 
-            padding: 20px;
-            text-align: center; 
-        }
-        
-        .product-container {
-            border: 1px solid #ccc;
-            padding: 25px;
-            margin-top: 20px;
-            text-align: left; 
-            display: inline-block; 
-            width: 100%;
-            box-sizing: border-box;
-        }
+    <link rel="stylesheet" href="/CSS/Style.CSS">
 
-        h1, h2, h3, h4 {
-            color: #333;
-        }
-        
-        .add-to-cart-form {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 20px;
-            padding: 15px 0;
-            border-top: 1px dashed #eee;
-        }
-        .add-to-cart-form input, .add-to-cart-form button {
-            padding: 8px;
-            border-radius: 4px;
-        }
-        .add-to-cart-form input {
-            border: 1px solid #aaa;
-        }
-        .add-to-cart-form button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
 </head>
+
 <body>
 
     <h1>Detalle del Producto</h1>
     <hr>
-    
+
     <div style="text-align: left; max-width: 800px; margin: 0 auto;">
         <a href="/products">&larr; Volver al Catálogo</a>
     </div>
 
     <div class="product-container">
-        
+
         <h2>{{product.title}}</h2>
-        
+
         <p><strong>Categoría:</strong> {{product.category}}</p>
 
         <h3>Precio: ${{product.price}}</h3>
@@ -72,11 +30,12 @@
             <h4>Descripción:</h4>
             <p>{{product.description}}</p>
         </div>
-        
+
         <div>
             <p><strong>Stock Disponible:</strong> {{product.stock}} unidades</p>
             <p><strong>Código del Producto:</strong> {{product.code}}</p>
         </div>
 
 </body>
+
 </html>
