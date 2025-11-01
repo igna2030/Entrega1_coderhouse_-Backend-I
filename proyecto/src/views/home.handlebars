@@ -1,19 +1,77 @@
-<h2>Lista de productos</h2>
-{{#if productos}}
-<ul id ="products-list-home">
-    {{#each productos}}
-    <li>
-        <strong>ID: {{this.id}} Nombre:{{this.title}}</strong>
-        Precio: {{this.price}} <br>
-        Descripcion: {{this.description}} <br>
-        Codigo: {{this.code}} <br>
-        Stock: {{this.stock}} <br>
-    </li>
-    {{/each}}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto; 
+            max-width: 600px; 
+            padding: 20px;
+            text-align: center; 
+        }
+        
+        .create-cart-section {
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
 
-</ul>
+        .btn-link-style {
+            background-color: transparent; 
+            color: #007bff; 
+            border: none; 
+            cursor: pointer;
+            text-decoration: underline; 
+            padding: 0; 
+            font-size: 1em; 
+            font-family: inherit;
+        }
+        .btn-link-style:hover {
+            color: #0056b3;
+        }
 
-{{else}}
-<strong> No hay productos para mostrar</strong>
+        .mt-5 {
+            margin-top: 3rem;
+        }
 
-{{/if}}
+        h3, p {
+            margin: 5px 0;
+            text-align: center;
+        }
+        
+        .mt-5 ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Bienvenido al Home</h2>
+
+    <div class="create-cart-section">
+        <h3>Crear Nuevo Carrito</h3>
+        <p>Utiliza esta función para iniciar una nueva sesión de compra. Se generará un ID único.</p>
+        
+        <form action="/home/create-cart" method="POST">
+            <button type="submit" class="btn-link-style">Crear Mi Carrito Ahora</button>
+        </form>
+    </div>
+
+    <div class="mt-5">
+        <h3>Explorar</h3>
+        <ul>
+            <li><a href="/products">Ver Catálogo de Productos</a></li>
+        </ul>
+    </div>
+
+    <div class="mt-5">
+        <h3> Crear producto</h3>
+    </div>
+
+</body>
+</html>

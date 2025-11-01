@@ -1,8 +1,7 @@
-import ProductModel from '../models/ProductModel.js';
 import mongoose from 'mongoose';
-import 'dotenv/config';
-
-const environment = async () => {
+import dotenv from 'dotenv';
+dotenv.config();
+export const environment = async () => {
   try {
     await mongoose.connect(
       process.env.MONGO_URI,
@@ -10,10 +9,8 @@ const environment = async () => {
     );
   } catch (error) {
     console.error(' Error al conectarse a la base de datos MongoDB:', error.message);
-    process.exit(1);
-  } finally {
-    await mongoose.disconnect();
-  }
+
+  } 
 
 
 }

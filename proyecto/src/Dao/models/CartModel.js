@@ -1,15 +1,13 @@
-import moongose from 'mongoose';
+import mongoose from 'mongoose';
 import moongosePaginate from 'mongoose-paginate-v2';
-import product from './ProductModel';
-
-const cartSchema = new moongose.Schema(
+const cartSchema = new mongoose.Schema(
     {
         products: {
             type: [
                 {
                     productId: {
-                        type: moongose.Schema.Types.ObjectId,
-                        ref: product,
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'products',
                         required:true
                     },
                     quantity: {type:Number,required:true,default:1}
@@ -22,11 +20,12 @@ const cartSchema = new moongose.Schema(
 );
 
 cartSchema.pre('findOne', function(){
-    this.populate('products.productId');
+    this.populate('products.productId');    
 })
 
 cartSchema.pre('findById',function(){
     this.populate('products.productId');
 })
 
-const cart = moongose.model('carts',cartSchema);
+const cart = mongoose.model('carts',cartSchema);
+export default cart;

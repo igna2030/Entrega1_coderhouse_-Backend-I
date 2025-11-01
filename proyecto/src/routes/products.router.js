@@ -1,20 +1,35 @@
 import { Router } from 'express';
-import ProductDao from '../dao/ProductDao.js'; 
+import ProductDao from '../Dao/ProductDao.js'; 
 
 const productsRouter = Router();
 
 
-
 productsRouter.get("/", async (req, res) => {
     try {
+        const { limit = 10, page = 1, sort, query } = req.query;
         const result = await productDao.getProducts(req.query); 
-        res.status(200).json({ status: "success", payload: result.docs });
-    } catch (error) {
-        console.error("Error al listar productos:", error);
-        res.status(500).json({ status: "error", message: "Error inesperado al listar productos: " + error.message });
-    }
-});
+        
+        const baseUrl = `/api/products?limit=${limit}&sort=${sort || ''}&query=${query || ''}`;
 
+        const response = {
+            status: "success",
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `${baseUrl}&page=${result.prevPage}` : null,
+            nextLink: result.hasNextPage ? `${baseUrl}&page=${result.nextPage}` : null,
+        };
+        
+        res.status(200).json(response);
+    } catch (error) { 
+
+        res.status(500).json({ status: "error", message: "Error inesperado al obtener productos: " + error.message });
+     }
+});
 
 productsRouter.get("/:pid", async (req, res) => {
     try {

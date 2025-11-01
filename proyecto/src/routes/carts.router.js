@@ -1,6 +1,5 @@
-   import { Router } from 'express';
-import CartDao from '../dao/CartDao.js'; 
-
+import { Router } from 'express';
+import CartDao from '../Dao/CartDao.js';
 const cartsRouter = Router();
 const cartDao = new CartDao();
 
@@ -49,6 +48,7 @@ cartsRouter.post('/:cid/products/:pid', async (req, res) => {
 cartsRouter.delete('/:cid/products/:pid', async (req, res) => {
     try {
         const { cid, pid } = req.params;
+        console.log('✅ ROUTER: Inició la eliminación para Carrito:', cid, 'y Producto:', pid); // <--- NUEVO LOG
         const updatedCart = await cartDao.removeProductFromCart(cid, pid);
         res.status(200).json({ status: 'success', message: 'Producto eliminado del carrito exitosamente', payload: updatedCart });
     } catch (error) {
@@ -111,8 +111,13 @@ cartsRouter.put('/:cid/products/:pid', async (req, res) => {
 cartsRouter.delete('/:cid', async (req, res) => {
     try {
         const cartId = req.params.cid;
-        const updatedCart = await cartDao.clearCart(cartId);
-        res.status(200).json({ status: 'success', message: 'Carrito vaciado exitosamente', payload: updatedCart });
+        const updatedCart = await cartDao.clearCart(cartId); // Call the new DAO method
+        
+        res.status(200).json({ 
+            status: 'success', 
+            message: 'Carrito vaciado exitosamente', 
+            payload: updatedCart 
+        });
     } catch (error) {
         if (error.message.includes('No existe un carrito')) {
             return res.status(404).json({ status: 'error', message: error.message });
@@ -123,5 +128,4 @@ cartsRouter.delete('/:cid', async (req, res) => {
         res.status(500).json({ status: 'error', message: 'Error al vaciar el carrito: ' + error.message });
     }
 });
-
 export default cartsRouter;

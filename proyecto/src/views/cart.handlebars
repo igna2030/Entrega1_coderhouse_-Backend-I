@@ -1,55 +1,110 @@
-<!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Carrito de Compras</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            max-width: 700px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .product-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+
+        .btn-link-style {
+            background-color: transparent;
+            color: #dc3545;/ border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .btn-link-style:hover {
+            color: #bd2130;
+        }
+
+        .checkout-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .btn-checkout {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-checkout:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
+
 <body>
+    <div style="text-align: left; margin-bottom: 20px;">
+        <a href="/home">Volver al menú Principal</a>
+    </div>
 
     <h1>Contenido del Carrito</h1>
-    <hr>
-    
-    <div>
+    <hr />
+    <div style="text-align: center; margin-bottom: 20px;">
         <p>
-            ID del Carrito: <span>{{cart._id}}</span>
+            ID del Carrito:
+            <span id="cartIdSpan">{{cart._id}}</span>
         </p>
     </div>
 
-    {{#if products}}
-    <div>
-        {{#each products}}
-        <div>
-            
+    {{#if cart.products}}
+    <div class="products-list">
+        {{#each cart.products}}
+        <div class="product-item">
             <div>
                 <h3>
                     {{productId.title}}
                 </h3>
                 <p>ID: {{productId._id}}</p>
-                <p>${{productId.price}}</p>
+                <p>Precio Unitario: ${{productId.price}}</p>
             </div>
-            
-            <div>
+            <div class="item-actions">
                 <div>
                     <span>Cantidad:</span>
-                    <span>{{quantity}}</span>
+                    <strong>{{quantity}}</strong>
                 </div>
 
-                <button 
-                    onclick="alert('Funcionalidad para eliminar producto {{productId.title}} (DELETE) aún no implementada en el cliente.')">
-                    Eliminar
+                <button class="btn-link-style remove-one-btn" data-product-id="{{productId._id}}"
+                    data-product-title="{{productId.title}}">
+                    Eliminar Producto
                 </button>
             </div>
         </div>
         {{/each}}
     </div>
-    
-    <div>
-        <button 
-            onclick="alert('Funcionalidad para finalizar compra aún no implementada.')">
-            Finalizar Compra
-        </button>
-    </div>
+
 
     {{else}}
     <div>
@@ -58,5 +113,46 @@
     </div>
     {{/if}}
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartIdSpan = document.getElementById('cartIdSpan');
+            if (!cartIdSpan) return;
+
+            const cartId = cartIdSpan.textContent.trim();
+
+            const removeBtns = document.querySelectorAll('.remove-one-btn');
+
+            removeBtns.forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const productId = e.target.getAttribute('data-product-id');
+                    const productTitle = e.target.getAttribute('data-product-title');
+
+                    if (!confirm(`¿Estás seguro de que quieres eliminar '${productTitle}' del carrito?`)) {
+                        return;
+                    }
+
+                    const url = `/api/carts/${cartId}/products/${productId}`;
+                    console.log('Intentando DELETE a URL:', url);
+
+                    try {
+                        const response = await fetch(url, { method: 'DELETE' });
+                        const data = await response.json();
+
+                        if (response.ok && data.status === 'success') {
+                            alert(`Producto '${productTitle}' eliminado exitosamente.`);
+
+                            window.location.reload();
+                        } else {
+                            alert(`Error al eliminar producto: ${data.message || 'Error desconocido.'}`);
+                        }
+                    } catch (error) {
+                        console.error('Error de red al eliminar producto:', error);
+                        alert('Error de conexión con el servidor.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

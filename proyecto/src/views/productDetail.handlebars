@@ -4,15 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Producto - {{product.title}}</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            max-width: 800px; 
+            padding: 20px;
+            text-align: center; 
+        }
+        
+        .product-container {
+            border: 1px solid #ccc;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: left; 
+            display: inline-block; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1, h2, h3, h4 {
+            color: #333;
+        }
+        
+        .add-to-cart-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px 0;
+            border-top: 1px dashed #eee;
+        }
+        .add-to-cart-form input, .add-to-cart-form button {
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .add-to-cart-form input {
+            border: 1px solid #aaa;
+        }
+        .add-to-cart-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
     <h1>Detalle del Producto</h1>
     <hr>
     
-    <a href="/products">&larr; Volver al Catálogo</a>
+    <div style="text-align: left; max-width: 800px; margin: 0 auto;">
+        <a href="/products">&larr; Volver al Catálogo</a>
+    </div>
 
-    <div>
+    <div class="product-container">
         
         <h2>{{product.title}}</h2>
         
@@ -29,18 +77,6 @@
             <p><strong>Stock Disponible:</strong> {{product.stock}} unidades</p>
             <p><strong>Código del Producto:</strong> {{product.code}}</p>
         </div>
-
-        <div>
-            <button 
-                onclick="alert('Funcionalidad de añadir {{product.title}} al carrito (ID: {{product._id}}).')">
-                Añadir al Carrito
-            </button>
-        </div>
-        
-        <p>
-            ID de MongoDB: {{product._id}}
-        </p>
-    </div>
 
 </body>
 </html>

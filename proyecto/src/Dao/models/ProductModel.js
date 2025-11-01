@@ -1,8 +1,8 @@
-import moongose from 'mongoose';
+import mongoose from 'mongoose';
 import moongosePaginate from 'mongoose-paginate-v2';
 import { type } from 'os';
 
-const productSchema = new moongose.Schema(
+const productSchema = new mongoose.Schema(
     {
         title: {type: String, required:true},
         description:{type: String, required:true},
@@ -17,5 +17,5 @@ const productSchema = new moongose.Schema(
 
 productSchema.plugin(moongosePaginate);
 
-const product = moongose.model('products',productSchema);
+const product = mongoose.model('products',productSchema);
 export default product;

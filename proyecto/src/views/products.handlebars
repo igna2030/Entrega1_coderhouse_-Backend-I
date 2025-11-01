@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    
+    <style>
+        /* Estilos básicos para centrar el contenedor principal */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto; /* Centra el cuerpo en la ventana */
+            max-width: 1000px; /* Limita el ancho para que el centrado sea visible */
+            padding: 20px;
+        }
+
+        /* Centrar texto en el encabezado y el pie (paginación) */
+        header, footer {
+            text-align: center;
+        }
+        
+        /* Estilo para el contenedor de la lista de productos */
+        .products-list {
+            display: flex; /* Habilita el flexbox para ordenar tarjetas */
+            flex-direction: column; /* Coloca las tarjetas una debajo de otra */
+            align-items: center; /* Centra las tarjetas horizontalmente */
+            padding: 20px 0;
+        }
+
+        /* Estilo para cada tarjeta de producto */
+        .product-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            width: 80%; /* Ancho de la tarjeta dentro del contenedor */
+            max-width: 600px; /* Limita el ancho de la tarjeta */
+            text-align: left; /* Alinea el contenido de la tarjeta a la izquierda (generalmente mejor) */
+        }
+        
+        /* Centrar el título de la página */
+        h1 {
+            text-align: center;
+        }
+
+        /* Estilos para el formulario de agregar al carrito */
+        .add-to-cart-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .form-group input {
+            padding: 5px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+        }
+        
+        /* Asegurar que el link del carrito no rompa el centrado del header */
+        .cart-link {
+            float: right;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid blue;
+        }
+
+        /* Estilos para la paginación */
+        .pagination-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Catálogo de Productos</h1>
+        {{#if cartId}}
+        <a href="/carts/{{cartId}}" class="cart-link">
+            Ver Mi Carrito (ID: {{cartId}})
+        </a>
+        {{/if}}
+    </header>
+    <hr>
+    
+    <div style="text-align: center;">
+        <span>Página {{currentPage}} de {{totalPages}}</span>
+    </div>
+
+    <div class="products-list">
+        {{#each products}}
+        <div class="product-card">
+            <h2>{{title}}</h2>
+            <p>{{description}}</p>
+            <p>${{price}}</p>
+            <p>Stock: {{stock}} | Categoría: {{category}}</p>
+            
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <a href="/products/{{_id}}">
+                    Ver Detalle
+                </a>
+                
+                <form class="add-to-cart-form" data-product-id="{{_id}}">
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            name="cartId" 
+                            placeholder="ID Carrito" 
+                            required
+                            title="Ingrese el ID del carrito"
+                        >
+                    </div>
+                    <button type="submit">
+                        Añadir al Carrito
+                    </button>
+                </form>
+            </div>
+        </div>
+        {{else}}
+        <p style="text-align: center; width: 100%;">No se encontraron productos en el catálogo.</p>
+        {{/each}}
+    </div>
+
+    <div class="pagination-container">
+        {{#if hasPrevPage}}
+        <a href="{{prevLink}}">
+            Página Anterior
+        </a>
+        {{else}}
+        <span>Página Anterior</span>
+        {{/if}}
+
+        <span>{{currentPage}}</span>
+
+        {{#if hasNextPage}}
+        <a href="{{nextLink}}">
+            Página Siguiente
+        </a>
+        {{else}}
+        <span>Página Siguiente</span>
+        {{/if}}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const forms = document.querySelectorAll('.add-to-cart-form');
+
+            forms.forEach(form => {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const productId = form.getAttribute('data-product-id');
+                    const cartIdInput = form.querySelector('input[name="cartId"]');
+                    const cartId = cartIdInput.value.trim();
+
+                    if (!cartId) {
+                        alert('Por favor, ingresa el ID del carrito.');
+                        return;
+                    }
+
+                    const url = `/api/carts/${cartId}/products/${productId}`;
+                    
+                    try {
+                        const response = await fetch(url, { method: 'POST' });
+                        const data = await response.json();
+
+                        if (response.ok && data.status === 'success') {
+                            alert(` Producto agregado al carrito ${cartId}.`);
+                            window.location.reload()
+                        } else {
+                            alert(` Error al agregar producto: ${data.message || 'Error desconocido.'}`);
+                        }
+                    } catch (error) {
+                        console.error('Error de red al añadir producto:', error);
+                        alert('Error de conexión con el servidor.');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

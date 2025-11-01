@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import ProductDao from '../dao/ProductDao.js';
-import CartDao from '../dao/CartDao.js';
+import ProductDao from '../Dao/ProductDao.js';
+import CartDao from '../Dao/CartDao.js';
 
 const viewsRouter = Router();
 const productDao = new ProductDao();
@@ -78,12 +78,27 @@ viewsRouter.get("/carts/:cid", async (req, res) => {
 });
 
 
-viewsRouter.get('/', (req, res) => {
-    res.redirect('/products');
+viewsRouter.get("/home", (req, res) => {
+    res.render("home", { title: "Página Principal" });
 });
 
-viewsRouter.get("/realtimeproducts", (req, res) => {
-    res.render("realTimeProducts", { title: "Productos en Tiempo Real" });
+viewsRouter.post("/home/create-cart", async (req, res) => {
+    try {
+        const newCart = await cartDao.createCart();
+        
+        res.redirect(`/carts/${newCart._id}`);
+
+    } catch (error) {
+        console.error("Error al crear carrito desde Home:", error);
+        res.status(500).render("error", { message: "No se pudo crear el carrito." });
+    }
 });
+
+
+viewsRouter.get('/', (req, res) => {
+ res.redirect('/home'); 
+});
+
+
 
 export default viewsRouter;
