@@ -25,6 +25,18 @@
     font-family: inherit;
 }
 
+.navbar{
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
 .btn-link-style:hover {
     color: #bd2130;
 }
@@ -144,8 +156,8 @@ footer {
 
 .products-list {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap; 
+    justify-content: center; 
     padding: 20px 0;
 }
 
@@ -155,7 +167,16 @@ footer {
     margin-bottom: 20px;
     width: 80%;
     max-width: 600px;
-    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left; 
+}
+
+.product-card > div:last-child {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center; 
 }
 
 h1 {
@@ -185,4 +206,87 @@ h1 {
 .pagination-container {
     text-align: center;
     margin-top: 20px;
+}
+
+.page-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.carts-container {
+    display: grid;
+    max-width: 1200px; 
+    margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.cart-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden; 
+    transition: transform 0.2s;
+}
+
+.cart-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.cart-id {
+    font-size: 1.1em;
+    margin: 0;
+    font-weight: 500;
+}
+
+.card-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.product-count {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.view-details-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #28a745; 
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.view-details-btn:hover {
+    background-color: #218838;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #f9f9f9;
+}
+
+.empty-message {
+    font-style: italic;
+    color: #777;
+    margin: 0;
 }

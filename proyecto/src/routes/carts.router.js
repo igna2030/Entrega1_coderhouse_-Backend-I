@@ -28,6 +28,17 @@ cartsRouter.get('/:cid', async (req, res) => {
     }
 });
 
+cartsRouter.get('/',async (req,res)=>{
+    try {
+        const carts = await cartDao.getAllCarts();
+        res.status(200).json({ status: 'success', payload: carts});
+        
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Error al obtener los carritos: ' + error.message });
+        
+    }
+})
+
 cartsRouter.post('/:cid/products/:pid', async (req, res) => {
     try {
         const { cid, pid } = req.params; 

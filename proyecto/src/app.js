@@ -28,7 +28,10 @@ app.use((req, res, next) => {
 });
 
 app.engine('handlebars', handlebars.engine({
-    defaultLayout: false
+    defaultLayout: false,
+    helpers: {
+        eq: (a, b) => a === b 
+    }
 }));
 app.set('views', process.cwd() + '/src/views');
 app.set('view engine', 'handlebars');

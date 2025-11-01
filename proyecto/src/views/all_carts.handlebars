@@ -1,0 +1,33 @@
+<head>
+        <link rel="stylesheet" href="/CSS/Style.CSS">
+</head>
+<div class="navbar">
+        <a href="/" class=".btn-link-style">Inicio</a>
+
+</div>
+<h1 class="page-title"> Todos los Carritos</h1>
+
+{{#if carts}}
+    <div class="carts-container">
+        {{#each carts}}
+            <div class="cart-card">
+                <div class="card-header">
+                    <h3 class="cart-id">ID: {{this._id}}</h3>
+                </div>
+                
+                <div class="card-body">
+                    <p class="product-count">
+                        Items en el carrito: {{this.products.length}}
+                    </p>
+                    
+                    <a href="/carts/{{this._id}}" class="view-details-btn">Ver Detalles</a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{else}}
+    <div class="empty-state">
+        <p class="empty-message">No hay carritos registrados en el sistema.</p>
+        <p>Intenta crear uno en la página principal.</p>
+    </div>
+{{/if}}

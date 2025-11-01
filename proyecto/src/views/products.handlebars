@@ -2,27 +2,38 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Productos</title>
-    <link rel="stylesheet" href="/CSS/Style.CSS">
-
-</head>
+    </head>
 
 <body>
-
+    <div class="navbar">
+        <a href="/" class=".btn-link-style">Inicio</a>
+        <a href="/carts" class=".btn-link-style">Ver Carritos</a>
+    </div>
     <header>
         <h1>Catálogo de Productos</h1>
-        {{#if cartId}}
-        <a href="/carts/{{cartId}}" class="cart-link">
-            Ver Mi Carrito (ID: {{cartId}})
-        </a>
-        {{/if}}
     </header>
     <hr>
-
-    <div style="text-align: center;">
-        <span>Página {{currentPage}} de {{totalPages}}</span>
+    
+    <div class="controls-bar" style="text-align: center; margin-bottom: 20px;">
+        <form id="sortForm" action="/products" method="GET" style="display: inline-block;">
+            <label for="sort-select" style="font-weight: bold;">Ordenar por Precio:</label>
+            <select id="sort-select" name="sort" onchange="this.form.submit()" style="padding: 8px; border-radius: 4px;">
+                
+                <option value="" {{#if (eq currentSort undefined)}}selected{{/if}}>-- Por Defecto --</option>
+                
+                <option value="asc" {{#if (eq currentSort 'asc')}}selected{{/if}}>Precio: Menor a Mayor</option>
+                
+                <option value="desc" {{#if (eq currentSort 'desc')}}selected{{/if}}>Precio: Mayor a Menor</option>
+            </select>
+            
+            {{#if currentLimit}}
+                <input type="hidden" name="limit" value="{{currentLimit}}">
+            {{/if}}
+            {{#if currentQuery}}
+                <input type="hidden" name="query" value="{{currentQuery}}">
+            {{/if}}
+            
+        </form>
     </div>
 
     <div class="products-list">
@@ -50,7 +61,7 @@
             </div>
         </div>
         {{else}}
-        <p style="text-align: center; width: 100%;">No se encontraron productos en el catálogo.</p>
+        <p style="text-align: center; width: 100%;">No se encontraron productos en el catálogo.</p>        
         {{/each}}
     </div>
 
@@ -60,57 +71,20 @@
             Página Anterior
         </a>
         {{else}}
-        <span>Página Anterior</span>
+        <span class="disabled-link">Página Anterior</span>
         {{/if}}
 
-        <span>{{currentPage}}</span>
+        <span class="current-page-number">{{currentPage}}</span>
 
         {{#if hasNextPage}}
         <a href="{{nextLink}}">
             Página Siguiente
         </a>
         {{else}}
-        <span>Página Siguiente</span>
+        <span class="disabled-link">Página Siguiente</span>
         {{/if}}
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const forms = document.querySelectorAll('.add-to-cart-form');
-
-            forms.forEach(form => {
-                form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const productId = form.getAttribute('data-product-id');
-                    const cartIdInput = form.querySelector('input[name="cartId"]');
-                    const cartId = cartIdInput.value.trim();
-
-                    if (!cartId) {
-                        alert('Por favor, ingresa el ID del carrito.');
-                        return;
-                    }
-
-                    const url = `/api/carts/${cartId}/products/${productId}`;
-
-                    try {
-                        const response = await fetch(url, { method: 'POST' });
-                        const data = await response.json();
-
-                        if (response.ok && data.status === 'success') {
-                            alert(` Producto agregado al carrito ${cartId}.`);
-                            window.location.reload()
-                        } else {
-                            alert(` Error al agregar producto: ${data.message || 'Error desconocido.'}`);
-                        }
-                    } catch (error) {
-                        console.error('Error de red al añadir producto:', error);
-                        alert('Error de conexión con el servidor.');
-                    }
-                });
-            });
-        });
-    </script>
-
-</body>
+    
+    </body>
 
 </html>

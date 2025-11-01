@@ -1,15 +1,36 @@
 import { Router } from 'express';
 import ProductDao from '../Dao/ProductDao.js'; 
+import product from '../Dao/models/ProductModel.js';
 
 const productsRouter = Router();
-
+const productDao = new ProductDao();
 
 productsRouter.get("/", async (req, res) => {
     try {
         const { limit = 10, page = 1, sort, query } = req.query;
-        const result = await productDao.getProducts(req.query); 
         
-        const baseUrl = `/api/products?limit=${limit}&sort=${sort || ''}&query=${query || ''}`;
+        const result = await productDao.getProducts({ limit, page, sort, query }); 
+
+        const params = { limit, sort, query };
+        let baseUrl = '/api/products';
+        
+        const queryParams = Object.keys(params)
+            .filter(key => params[key]) 
+            .map(key => `${key}=${params[key]}`)
+            .join('&');
+
+        if (queryParams) {
+            baseUrl += `?${queryParams}`;
+        }
+        
+        const prevLink = result.hasPrevPage 
+            ? `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}page=${result.prevPage}` 
+            : null;
+        
+        const nextLink = result.hasNextPage 
+            ? `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}page=${result.nextPage}` 
+            : null;
+
 
         const response = {
             status: "success",
@@ -20,17 +41,15 @@ productsRouter.get("/", async (req, res) => {
             page: result.page,
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
-            prevLink: result.hasPrevPage ? `${baseUrl}&page=${result.prevPage}` : null,
-            nextLink: result.hasNextPage ? `${baseUrl}&page=${result.nextPage}` : null,
+            prevLink, 
+            nextLink,
         };
         
         res.status(200).json(response);
-    } catch (error) { 
-
-        res.status(500).json({ status: "error", message: "Error inesperado al obtener productos: " + error.message });
-     }
+    } catch (error) {
+    res.status(500).json({status:"error",message:"Error inseperado al obtener productos: "+error.message}) 
+    }
 });
-
 productsRouter.get("/:pid", async (req, res) => {
     try {
         const productId = req.params.pid;

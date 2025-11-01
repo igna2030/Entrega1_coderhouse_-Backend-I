@@ -64,7 +64,7 @@ async removeProductFromCart(cid, pid) {
 
     try {
         await productDao.increaseStock(pid, quantityToRemove); 
-        console.log(`✅ Stock devuelto exitosamente para el producto ${pid}.`);
+        console.log(` Stock devuelto exitosamente para el producto ${pid}.`);
     } catch (stockError) {
          console.error(`Advertencia: Fallo al devolver stock para el producto ${pid}. Causa:`, stockError.message);
     }
@@ -127,6 +127,10 @@ async removeProductFromCart(cid, pid) {
 
         await cart.save();
         return cart;
+    }
+
+    async getAllCarts() {
+        return await CartModel.find().lean();
     }
 }
 

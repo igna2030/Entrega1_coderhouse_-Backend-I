@@ -4,32 +4,32 @@ class ProductDao {
 
     async getProducts({ limit = 10, page = 1, sort, query }) {
         try {
+            const limitInt = Math.max(1, parseInt(limit));
+            const pageInt = Math.max(1, parseInt(page));
             const options = {
-                limit: parseInt(limit),
-                page: parseInt(page),
+                limit: limitInt,
+                page: pageInt,
                 lean: true, 
             };
-
             const filter = {};
-            const sortOptions = {};
-
-            if (query) {
+                        if (query) {
                 const [field, value] = query.split(':');
                 if (field === 'category') {
-                    filter.category = value;
+                    filter.category = value; 
                 } else if (field === 'stock' && value === 'available') {
-                    filter.stock = { $gt: 0 };
+                    filter.stock = { $gt: 0 }; 
                 }
             }
-
             if (sort) {
+                const sortOptions = {};
                 if (sort === 'asc') {
-                    sortOptions.price = 1; 
+                    sortOptions.price = 1;
                 } else if (sort === 'desc') {
                     sortOptions.price = -1;
                 }
                 options.sort = sortOptions;
             }
+            
             const result = await ProductModel.paginate(filter, options);
             
             return result; 
@@ -38,12 +38,15 @@ class ProductDao {
             console.error("Error en ProductDao.getProducts:", error.message);
             return {
                 docs: [],
+                totalDocs: 0,
+                limit: limitInt,
                 totalPages: 1,
+                page: pageInt,
                 prevPage: null,
                 nextPage: null,
                 hasPrevPage: false,
                 hasNextPage: false,
-                page: 1,
+                pagingCounter: 0,
             };
         }
     }
@@ -95,7 +98,12 @@ async increaseStock(productId, quantityToIncrease) {
     
     return updatedProduct;
 }
-}
 
+async sortProductsByPrice(order = 'asc'){
+    const sortedOrder = order === 'asc' ?1: -1;
+    const sortedProducts =await this.getProducts({sort: sortedOrder});
+    return sortedProducts;
+}
+}
 
 export default ProductDao;
