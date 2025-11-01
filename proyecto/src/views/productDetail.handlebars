@@ -1,0 +1,42 @@
+<head>
+    <title>Detalle del Producto - {{product.title}}</title>
+</head>
+<body>
+
+    <h1>Detalle del Producto</h1>
+    <hr>
+    
+    <a href="/products" style="text-decoration: none; color: blue;">&larr; Volver al Catálogo</a>
+
+    <div style="margin-top: 20px; border: 1px solid #ccc; padding: 20px;">
+        
+        <h2>{{product.title}}</h2>
+        
+        <p><strong>Categoría:</strong> {{product.category}}</p>
+
+        <h3 style="color: green;">Precio: ${{product.price}}</h3>
+
+        <div style="margin-top: 15px;">
+            <h4>Descripción:</h4>
+            <p>{{product.description}}</p>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <p><strong>Stock Disponible:</strong> {{product.stock}} unidades</p>
+            <p><strong>Código del Producto:</strong> {{product.code}}</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button 
+                onclick="alert('Funcionalidad de añadir {{product.title}} al carrito (ID: {{product._id}}).')"
+                style="background-color: blue; color: white; padding: 10px 15px; border: none; cursor: pointer;">
+                Añadir al Carrito
+            </button>
+        </div>
+        
+        <p style="font-size: 10px; color: #666; margin-top: 10px;">
+            ID de MongoDB: {{product._id}}
+        </p>
+    </div>
+
+</body>
