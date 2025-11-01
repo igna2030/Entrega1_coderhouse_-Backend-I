@@ -1,33 +1,62 @@
-<h1>Productos en Tiempo Real (Socket.io)</h1>
-<div class="forms-container">
-    <h2>Agregar Nuevo Producto</h2>
-    <form id="addProductForm">
-        <input type="text" name="title" placeholder="Título" required>
-        <input type="text" name="description" placeholder="Descripción" required>
-        <input type="number" name="price" placeholder="Precio" required>
-        <input type="text" name="thumbnail" placeholder="Imagen URL">
-        <input type="text" name="code" placeholder="Código Único" required>
-        <input type="number" name="stock" placeholder="Stock" required>
-        <button type="submit">Agregar Producto</button>
-    </form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+</head>
+<body>
 
-    <h2>Eliminar Producto por ID</h2>
-    <form id="deleteProductForm">
-        <input type="number" name="id" placeholder="ID del Producto a Eliminar" required>
-        <button type="submit">Eliminar Producto</button>
-    </form>
-</div>
+    <h1>Catálogo de Productos</h1>
+    <hr>
+    
+    <div>
+        <span>Página {{currentPage}} de {{totalPages}}</span>
+    </div>
 
-<hr>
+    <div>
+        {{#each products}}
+        <div>
+            <h2>{{title}}</h2>
+            <p>{{description}}</p>
+            <p>${{price}}</p>
+            <p>Stock: {{stock}} | Categoría: {{category}}</p>
+            
+            <div>
+                <a href="/products/{{_id}}">
+                    Ver Detalle
+                </a>
+                <button 
+                    onclick="alert('Funcionalidad de agregar al carrito (ID: {{_id}}) aún no implementada en el cliente.')">
+                    Añadir al Carrito
+                </button>
+            </div>
+        </div>
+        {{else}}
+        <p>No se encontraron productos en el catálogo.</p>
+        {{/each}}
+    </div>
 
-<h2>Lista de Productos en Tiempo Real</h2>
-<ul id="realTimeProductsList">
-    {{#each productos}}
-        <li id="product-{{this.id}}">
-            <strong>ID: {{this.id}} Nombre: {{this.title}}</strong> - Precio: {{this.price}}
-        </li>
-    {{/each}}
-</ul>
+    <div>
+        
+        {{#if hasPrevPage}}
+            <a href="{{prevLink}}">
+                Página Anterior
+            </a>
+        {{else}}
+            <span>Página Anterior</span>
+        {{/if}}
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/realTimeProducts.js"></script>
+        <span>{{currentPage}}</span>
+
+        {{#if hasNextPage}}
+            <a href="{{nextLink}}">
+                Página Siguiente
+            </a>
+        {{else}}
+            <span>Página Siguiente</span>
+        {{/if}}
+    </div>
+
+</body>
+</html>
